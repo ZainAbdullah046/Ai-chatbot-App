@@ -12,13 +12,15 @@ class _MyWidgetState extends State<Chatscreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: Color.fromARGB(255, 97, 178, 245),
-            title: const Text(
-              "Za_Ai App",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
+            backgroundColor: Color.fromARGB(255, 167, 203, 232),
+            title: const Center(
+              child: Text(
+                "Za_Ai App",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             shape: const RoundedRectangleBorder(
