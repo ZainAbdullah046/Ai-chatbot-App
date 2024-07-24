@@ -15,16 +15,12 @@ class _MyWidgetState extends State<Splash> with TickerProviderStateMixin {
   late final AnimationController _controller =
       AnimationController(duration: const Duration(seconds: 1), vsync: this)
         ..repeat();
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
-  }
 
   void initState() {
     super.initState();
     Timer(
         const Duration(seconds: 4),
-        () => Navigator.push(context,
+        () => Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const Chatscreen())));
   }
 
