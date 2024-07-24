@@ -13,7 +13,7 @@ class Splash extends StatefulWidget {
 
 class _MyWidgetState extends State<Splash> with TickerProviderStateMixin {
   late final AnimationController _controller =
-      AnimationController(duration: const Duration(seconds: 3), vsync: this)
+      AnimationController(duration: const Duration(seconds: 1), vsync: this)
         ..repeat();
   void dispose() {
     super.dispose();
@@ -42,7 +42,7 @@ class _MyWidgetState extends State<Splash> with TickerProviderStateMixin {
               child: Container(
                 height: 200,
                 width: 200,
-                child: Center(child: Image.asset("images/logo_1.png")),
+                child: Center(child: Image.asset("images/images.jpg")),
               ),
               builder: (BuildContext context, Widget? child) {
                 return Transform.rotate(
@@ -50,6 +50,12 @@ class _MyWidgetState extends State<Splash> with TickerProviderStateMixin {
                   child: child,
                 );
               }),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.08,
+          ),
+          const Align(
+            alignment: Alignment.center,
+          ),
         ],
       )),
     );
