@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
+import 'package:zaai_app/const.dart';
 import 'package:zaai_app/splash.dart';
 
 void main() {
+  Gemini.init(apiKey: geminikey);
   runApp(const MyApp());
 }
 
