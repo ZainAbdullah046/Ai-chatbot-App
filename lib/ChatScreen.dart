@@ -6,55 +6,55 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:image_picker/image_picker.dart';
 
-class Chatscreen extends StatefulWidget {
-  const Chatscreen({super.key});
+class ChatScreeen extends StatefulWidget {
+  const ChatScreeen({super.key});
 
   @override
-  State<Chatscreen> createState() => _ChatscreenState();
+  State<ChatScreeen> createState() => _HomePageState();
 }
 
-class _ChatscreenState extends State<Chatscreen> {
+class _HomePageState extends State<ChatScreeen> {
   final Gemini gemini = Gemini.instance;
-  List<ChatMessage> messages = [];
-  ChatUser currentUser = ChatUser(id: "0", firstName: "Zain");
-  ChatUser geminiUser = ChatUser(id: "1", firstName: "Gemini");
 
+  List<ChatMessage> messages = [];
+
+  ChatUser currentUser = ChatUser(id: "0", firstName: "User");
+  ChatUser geminiUser = ChatUser(
+    id: "1",
+    firstName: "Gemini",
+    profileImage:
+        "https://seeklogo.com/images/G/google-gemini-logo-A5787B2669-seeklogo.com.png",
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 167, 203, 232),
+        centerTitle: true,
         title: const Text(
           "Gemini Chat",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(15),
-          ),
         ),
       ),
-      body: _UIBuilder(),
+      body: _buildUI(),
     );
   }
 
-  Widget _UIBuilder() {
+  Widget _buildUI() {
     return DashChat(
       inputOptions: InputOptions(trailing: [
-        IconButton(onPressed: _sendMediaMessage, icon: const Icon(Icons.image))
+        IconButton(
+          onPressed: _sendMediaMessage,
+          icon: const Icon(
+            Icons.image,
+          ),
+        )
       ]),
       currentUser: currentUser,
-      onSend: _SendMessage,
+      onSend: _sendMessage,
       messages: messages,
     );
   }
 
-  void _SendMessage(ChatMessage chatMessage) {
+  void _sendMessage(ChatMessage chatMessage) {
     setState(() {
       messages = [chatMessage, ...messages];
     });
@@ -66,23 +66,33 @@ class _ChatscreenState extends State<Chatscreen> {
           File(chatMessage.medias!.first.url).readAsBytesSync(),
         ];
       }
-      gemini.streamGenerateContent(question, images: images).listen((event) {
+      gemini
+          .streamGenerateContent(
+        question,
+        images: images,
+      )
+          .listen((event) {
         ChatMessage? lastMessage = messages.firstOrNull;
-        if (lastMessage != Null && lastMessage?.user == geminiUser) {
+        if (lastMessage != null && lastMessage.user == geminiUser) {
           lastMessage = messages.removeAt(0);
           String response = event.content?.parts?.fold(
-                  "", (previous, current) => "$previous${current.text}") ??
+                  "", (previous, current) => "$previous ${current.text}") ??
               "";
           lastMessage.text += response;
-          setState(() {
-            messages = [lastMessage!, ...messages];
-          });
+          setState(
+            () {
+              messages = [lastMessage!, ...messages];
+            },
+          );
         } else {
           String response = event.content?.parts?.fold(
-                  "", (previous, current) => "$previous${current.text}") ??
+                  "", (previous, current) => "$previous ${current.text}") ??
               "";
           ChatMessage message = ChatMessage(
-              user: geminiUser, createdAt: DateTime.now(), text: response);
+            user: geminiUser,
+            createdAt: DateTime.now(),
+            text: response,
+          );
           setState(() {
             messages = [message, ...messages];
           });
@@ -93,18 +103,25 @@ class _ChatscreenState extends State<Chatscreen> {
     }
   }
 
-  Future<void> _sendMediaMessage() async {
+  void _sendMediaMessage() async {
     ImagePicker picker = ImagePicker();
-    XFile? file = await picker.pickImage(source: ImageSource.gallery);
+    XFile? file = await picker.pickImage(
+      source: ImageSource.gallery,
+    );
     if (file != null) {
       ChatMessage chatMessage = ChatMessage(
-          user: currentUser,
-          createdAt: DateTime.now(),
-          text: "Describe this image?",
-          medias: [
-            ChatMedia(url: file.path, fileName: "", type: MediaType.image)
-          ]);
-      _SendMessage(chatMessage);
+        user: currentUser,
+        createdAt: DateTime.now(),
+        text: "Describe this picture?",
+        medias: [
+          ChatMedia(
+            url: file.path,
+            fileName: "",
+            type: MediaType.image,
+          )
+        ],
+      );
+      _sendMessage(chatMessage);
     }
   }
 }

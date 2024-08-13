@@ -20,8 +20,8 @@ class _MyWidgetState extends State<Splash> with TickerProviderStateMixin {
     super.initState();
     Timer(
         const Duration(seconds: 2),
-        () => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const Chatscreen())));
+        () => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => ChatScreeen())));
   }
 
   @override
